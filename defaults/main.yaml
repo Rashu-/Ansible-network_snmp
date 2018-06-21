@@ -1,0 +1,8 @@
+---
+# Define the snmp settings to be configured (see README for examples)
+snmp: { }
+
+
+
+
+    

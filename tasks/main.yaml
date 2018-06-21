@@ -1,0 +1,64 @@
+---
+
+- name: Check network device OS
+  assert:
+    that: >
+      ansible_network_os == 'nxos' or
+      ansible_network_os == 'ios'
+    msg: "Network device OS not defined or not supported by this role: {{ ansible_network_os }}"
+
+- name: Configure snmp notifications settings
+  nxos_snmp_host:
+    community: "{{ snmp.notifications.user | default(omit) }}"
+    snmp_host: "{{ snmp.notifications.host | default(omit) }}"
+    snmp_type: "{{ snmp.notifications.type | default(omit) }}"
+    src_intf: "{{ snmp.notifications.source_int | default(omit) }}"
+    state: "{{ snmp.notifications.state | default(omit) }}"
+    udp: "{{ snmp.notifications.port | default(omit) }}"
+    v3: "{{ snmp.notifications.v3_security | default(omit) }}"    
+    version: "{{ snmp.notifications.version | default(omit) }}"
+    vrf: "{{ snmp.notifications.vrf | default(omit) }}"
+  when: >
+    ansible_network_os == 'nxos' and  
+    snmp.notifications is defined
+  tags: 
+    - snmp_config
+    - nxos
+
+- name: Configure snmp users
+  nxos_snmp_user:
+    user: "{{ snmp.user.user }}"    
+    state: "{{ snmp.user.state | default(omit) }}"
+    authentication: "{{ snmp.user.auth | default(omit) }}"
+    encrypt: "{{ snmp.user.encrypt | default(omit) }}"
+    group: "{{ snmp.user.group | default(omit) }}"
+    privacy: "{{ snmp.user.privacy | default(omit) }}"
+    pwd: "{{ snmp.user.pwd | default(omit) }}"
+  when: >
+    ansible_network_os == 'nxos' and  
+    snmp.user is defined
+  tags: 
+    - snmp_config
+    - nxos
+
+- name: Configure snmp contact
+  nxos_snmp_contact:
+    contact: "{{ snmp.contact.name }}"    
+    state: "{{ snmp.contact.state | default(omit) }}"
+  when: >
+    ansible_network_os == 'nxos' and  
+    snmp.contact is defined
+  tags: 
+    - snmp_config
+    - nxos
+
+- name: Configure snmp location
+  nxos_snmp_location:
+    location: "{{ snmp.location.name }}"    
+    state: "{{ snmp.location.state | default(omit) }}"
+  when: >
+    ansible_network_os == 'nxos' and  
+    snmp.location is defined
+  tags: 
+    - snmp_config
+    - nxos
