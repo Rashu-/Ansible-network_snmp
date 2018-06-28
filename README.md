@@ -7,6 +7,7 @@ All settings can be configured by changing role parameters or by declaring new c
 
 Please report any issues or send PR.
 
+nxos specific: if password strength-check is enabled on device and you use a password that doesn't meet the reqs the task fails silently.  
 
 ## Examples
 
